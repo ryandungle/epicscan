@@ -106,6 +106,16 @@ class Bar extends Component {
                   </Button>
                 </Box>
               )}
+              <Box mr={1}>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/transactions"
+                  variant="outlined"
+                >
+                  Transactions
+                </Button>
+              </Box>
 
               <IconButton
                 color="inherit"

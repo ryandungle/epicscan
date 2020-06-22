@@ -8,15 +8,15 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { Refresh as RefreshIcon, Home as HomeIcon } from "@material-ui/icons";
 
-import { firestore } from "../../firebase";
+import { firestore } from "../../../firebase";
 
-import EmptyState from "../EmptyState";
+import EmptyState from "../../EmptyState";
 
-import Loader from "../Loader";
-import UserCard from "../UserCard";
+import Loader from "../../Loader";
+import UserCard from "../../UserCard";
 
-import { ReactComponent as ErrorIllustration } from "../../illustrations/error.svg";
-import { ReactComponent as NoDataIllustration } from "../../illustrations/no-data.svg";
+import { ReactComponent as ErrorIllustration } from "../../../illustrations/error.svg";
+import { ReactComponent as NoDataIllustration } from "../../../illustrations/no-data.svg";
 
 const useStyles = makeStyles({
   grid: {
