@@ -30,7 +30,7 @@ import {
 } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../../Loader";
-import { SET_PATIENTS } from "../../../redux/types";
+import * as actions from "../../../redux/types";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -61,23 +61,8 @@ export default function AddPatientDialog() {
   };
 
   const handleDataSubmit = () => {
-    firestore
-      .collection("patients")
-      .add(values)
-      .then((ref) => {
-        console.log("Added document with ID: ", ref.id);
-        dispatch({
-          type: SET_PATIENTS,
-          payload: {
-            pId: ref.id,
-            name: values.FirstName + " " + values.LastName,
-          },
-        });
-        handleClose();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch({ type: actions.ADD_PATIENT, payload: values });
+    handleClose();
   };
 
   const { values, onChange, handleDateChange, onSubmit } = useForm(

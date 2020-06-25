@@ -5,6 +5,7 @@ import AddPatientDialog from "../Dialogs/AddPatientDialog";
 
 //redux stuff
 import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../redux/types";
 
 import { useParams, Link } from "react-router-dom";
 //MUI stuff
@@ -61,34 +62,12 @@ function TransactionsPage() {
   });
   const classes = useStyles();
   useEffect(() => {
-    firestore
-      .collection("patients")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          const name = doc.data().FirstName + " " + doc.data().LastName;
-          const patientItem = {
-            pId: doc.id,
-            name: name,
-          };
-          data.patients.push(patientItem);
-        });
-      });
-    return () => {
-      data.patients = [];
-      console.log(data.patients);
-    };
-  }, [data.patients]);
+    dispatch({ type: actions.GET_PATIENTS });
+  }, []);
   const [selectedDate, setSelectedDate] = useState(
     new Date("2014-08-18T21:11:54")
   );
-  const handleSubmit = () => {
-    dispatch({
-      type: "SET_TRANSACTIONS",
-      payload: transDetails,
-    });
-  };
+  const handleSubmit = () => {};
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
