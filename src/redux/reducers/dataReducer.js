@@ -4,6 +4,10 @@ import { firestore } from "../../firebase";
 const initialState = {
   transactions: [],
   patients: [],
+  patient: {
+    pid: "",
+    name: "",
+  },
   loading: false,
 };
 
@@ -16,44 +20,21 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case actions.ADD_PATIENT:
-      let patient = {};
-      firestore
-        .collection("patients")
-        .add(action.payload)
-        .then((ref) => {
-          console.log("Added document with ID: ", ref.id);
-          patient = {
-            pId: ref.id,
-            name: action.payload.FirstName + " " + action.payload.LastName,
-          };
-        })
-        .catch((err) => {
-          console.log(err);
-        });
       return {
         ...state,
-        patients: [patient, ...state.patients],
+        patients: [action.payload, ...state.patients],
+        loading: false,
+      };
+    case actions.SET_PATIENT:
+      return {
+        ...state,
+        patient: action.payload,
         loading: false,
       };
     case actions.GET_PATIENTS:
-      let patients = [];
-      firestore
-        .collection("patients")
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            const name = doc.data().FirstName + " " + doc.data().LastName;
-            const patientItem = {
-              pId: doc.id,
-              name,
-            };
-            patients.push(patientItem);
-          });
-        });
       return {
         ...state,
-        patients,
+        patients: action.payload,
         loading: false,
       };
     case actions.ADD_PHYSICIAN:

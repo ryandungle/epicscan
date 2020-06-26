@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { useForm } from "../../../utils/hooks";
@@ -30,7 +30,7 @@ import {
 } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../../Loader";
-import * as actions from "../../../redux/types";
+import { addPatient } from "../../../redux/actions/dataActions";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
 export default function AddPatientDialog() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const addPatientAction = (patient) => dispatch(addPatient(patient));
+
   const data = useSelector((state) => state.data);
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
@@ -55,20 +57,22 @@ export default function AddPatientDialog() {
     setOpen(false);
   };
   const patient = {
-    DOB: "",
+    DOB: new Date(),
     createdAt: new Date().toISOString(),
     createdUserId: auth.currentUser.uid,
   };
-
-  const handleDataSubmit = () => {
-    dispatch({ type: actions.ADD_PATIENT, payload: values });
-    handleClose();
-  };
-
   const { values, onChange, handleDateChange, onSubmit } = useForm(
     handleDataSubmit,
     patient
   );
+
+  function handleDataSubmit() {
+    (() => {
+      addPatientAction(values);
+      handleClose();
+    })();
+  }
+
   const dialogMarkup = data.loading ? (
     <Loader />
   ) : (

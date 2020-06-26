@@ -5,7 +5,7 @@ import AddPatientDialog from "../Dialogs/AddPatientDialog";
 
 //redux stuff
 import { useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../redux/types";
+import { getPatients } from "../../../redux/actions/dataActions";
 
 import { useParams, Link } from "react-router-dom";
 //MUI stuff
@@ -48,9 +48,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TransactionsPage() {
+  const data = useSelector((state) => state.data);
+  const [curPatient, setCurPatient] = useState("");
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.data);
+  const getPatientsAction = () => dispatch(getPatients());
+
   const [transDetails, setTransDetails] = useState({
     patientId: "",
     readingDate: "",
@@ -62,11 +65,9 @@ function TransactionsPage() {
   });
   const classes = useStyles();
   useEffect(() => {
-    dispatch({ type: actions.GET_PATIENTS });
+    getPatientsAction();
   }, []);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date("2014-08-18T21:11:54")
-  );
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const handleSubmit = () => {};
   const handleDateChange = (date) => {
     setSelectedDate(date);
