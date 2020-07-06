@@ -9,6 +9,7 @@ import AdminPage from "../AdminPage";
 import UserPage from "../Pages/UserPage";
 import NotFoundPage from "../NotFoundPage";
 import TransactionsPage from "../Pages/TransactionPage";
+import TestPage from "../Pages/TestPage";
 
 class Router extends Component {
   render() {
@@ -37,6 +38,9 @@ class Router extends Component {
 
           <Route path="/transactions">
             {user ? <TransactionsPage /> : <Redirect to="/" />}
+          </Route>
+          <Route path="/testpage">
+            {user ? <TestPage /> : <Redirect to="/" />}
           </Route>
 
           <Route path="/user/:userId">

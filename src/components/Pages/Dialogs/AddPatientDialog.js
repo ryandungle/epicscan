@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { useForm } from "../../../utils/hooks";
@@ -8,6 +8,9 @@ import { firestore, auth } from "../../../firebase";
 import { useSelector, useDispatch } from "react-redux";
 //MUI stuff
 import {
+  InputLabel,
+  Select,
+  MenuItem,
   Grid,
   Dialog,
   DialogActions,
@@ -28,11 +31,18 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from "../../Loader";
-import { addPatient } from "../../../redux/actions/dataActions";
+//redux stuff
+import { addPatient, getPhysicians } from "../../../redux/actions/dataActions";
+import AddPhysicianDialog from "./AddPhysicianDialog";
 
 const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
   grid: {
     margin: 0,
     width: "100%",
@@ -47,8 +57,10 @@ export default function AddPatientDialog() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const addPatientAction = (patient) => dispatch(addPatient(patient));
+  const getPhysiciansAction = () => getPhysicians()(dispatch);
 
   const data = useSelector((state) => state.data);
+  const physicians = data.physicians;
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -56,15 +68,22 @@ export default function AddPatientDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    getPhysiciansAction();
+  }, []);
   const patient = {
+    physician: "",
     DOB: new Date(),
     createdAt: new Date().toISOString(),
     createdUserId: auth.currentUser.uid,
   };
-  const { values, onChange, handleDateChange, onSubmit } = useForm(
-    handleDataSubmit,
-    patient
-  );
+  const {
+    values,
+    onChange,
+    handlePhysicianChange,
+    handleDateChange,
+    onSubmit,
+  } = useForm(handleDataSubmit, patient);
 
   function handleDataSubmit() {
     (() => {
@@ -83,7 +102,7 @@ export default function AddPatientDialog() {
           margin="dense"
           id="firstName"
           label="First Name"
-          value={values.FirstName}
+          value={values.firstName}
           name="FirstName"
           onChange={onChange}
           type="text"
@@ -93,28 +112,32 @@ export default function AddPatientDialog() {
           margin="dense"
           id="lastName"
           label="Last Name"
-          value={values.LastName}
+          value={values.lastName}
           name="LastName"
           onChange={onChange}
           type="text"
           fullWidth
         />
-        <TextField
-          margin="dense"
-          id="physician"
-          label="Physician"
-          value={values.Physician}
-          name="Physician"
-          onChange={onChange}
-          type="text"
-          fullWidth
-        />
+        <FormControl className={classes.formControl}>
+          <InputLabel>Physician</InputLabel>
+          <Select
+            id="physicianId"
+            name="physicianId"
+            value={values.physicianId}
+            onChange={onChange}
+          >
+            {physicians.map((item) => (
+              <MenuItem value={item.pysId}>{item.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <AddPhysicianDialog />
         <FormControl component="fieldset" margin="dense">
           <FormLabel component="legend">Ethnicity</FormLabel>
           <RadioGroup
             aria-label="ethnicity"
-            name="ethnicity"
-            value={values.Ethnicity}
+            id="ethnicity"
+            value={values.ethnicity}
             onChange={onChange}
           >
             <FormControlLabel
@@ -164,7 +187,7 @@ export default function AddPatientDialog() {
         <TextField
           margin="dense"
           id="email"
-          value={values.Email}
+          value={values.email}
           name="Email"
           onChange={onChange}
           label="Email"
@@ -175,7 +198,7 @@ export default function AddPatientDialog() {
           margin="dense"
           id="phoneNumber"
           label="Phone Number"
-          value={values.Phone}
+          value={values.phoneNumber}
           name="Phone"
           onChange={onChange}
           type="text"

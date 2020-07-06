@@ -3,7 +3,10 @@ import { firestore } from "../../firebase";
 
 const initialState = {
   transactions: [],
+  bodyparts: [],
   patients: [],
+  physicians: [],
+  clinics: [],
   patient: {
     pid: "",
     name: "",
@@ -38,9 +41,41 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case actions.ADD_PHYSICIAN:
-      return { ...state };
+      return {
+        ...state,
+        physicians: [action.payload, ...state.physicians],
+        loading: false,
+      };
+    case actions.GET_PHYSICIANS:
+      return {
+        ...state,
+        physicians: action.payload,
+        loading: false,
+      };
     case actions.ADD_CLINIC:
-      return { ...state };
+      return {
+        ...state,
+        clinics: [action.payload, ...state.clinics],
+        loading: false,
+      };
+    case actions.GET_CLINICS:
+      return {
+        ...state,
+        clinics: action.payload,
+        loading: false,
+      };
+    case actions.GET_BODYPARTS:
+      return {
+        ...state,
+        bodyparts: action.payload,
+        loading: false,
+      };
+    case actions.ADD_BODYPART:
+      return {
+        ...state,
+        bodyparts: [action.payload, ...state.bodyparts],
+        loading: false,
+      };
     default:
       return state;
   }
