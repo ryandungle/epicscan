@@ -30,7 +30,6 @@ export default function PatientAutocomplete(props) {
   });
 
   const handleClose = () => {
-    addPatientsAction();
     toggleOpen(false);
     setDialogValue({
       FirstName: "",
@@ -46,7 +45,7 @@ export default function PatientAutocomplete(props) {
       FirstName: dialogValue.FirstName,
       LastName: dialogValue.LastName,
     });
-
+    addPatientsAction();
     handleClose();
   };
 

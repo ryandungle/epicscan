@@ -115,7 +115,7 @@ export default function BodyPartAutocomplete(props) {
   };
 
   const onClick = () => {
-    console.log(dialogValue.img);
+    console.log(console.log(value));
   };
 
   const onChange = (event, newValue) => {
@@ -138,6 +138,7 @@ export default function BodyPartAutocomplete(props) {
       });
     } else {
       setValue(newValue);
+      props.SelectedValue(newValue);
     }
   };
   return (
