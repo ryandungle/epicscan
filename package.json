@@ -18,7 +18,7 @@
     "camelcase": "^6.0.0",
     "customize-cra": "^0.9.1",
     "date-fns": "^2.14.0",
-    "firebase": "^7.14.1",
+    "firebase": "^10.9.0",
     "mdi-material-ui": "^6.13.2",
     "moment": "^2.24.0",
     "react": "^16.13.1",
